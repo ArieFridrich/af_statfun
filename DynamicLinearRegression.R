@@ -67,23 +67,24 @@ ggplotly(p) %>%
 
 
 ui <- fluidPage(
-  sliderInput("y_intercept", "Y-Intercept", min = -10, max = 10, value = 0),
-  sliderInput("slope", "Slope", min = -10, max = 10, value = 1),
+  sliderInput("y_intercept", "Y-Intercept", min = -10, max = 10, step = 0.1, value = 0),
+  sliderInput("slope", "Slope", min = 0, max = 1, step = 0.01, value = 1),
   plotOutput("plot")
 )
 
 server <- function(input, output, session) {
   output$plot <- renderPlot({
     # Create a data frame with x values
-    x <- seq(-10, 10, length.out = 100)
+    x <- seq(0, 100, length.out = 10)
     df <- data.frame(x = x, y = input$y_intercept + input$slope * x)
     
     # Create a ggplot with a straight line
     p <- ggplot(df, aes(x, y)) +
       geom_line() +
-      xlim(-10, 10) +
-      ylim(-10, 10) +
-      labs(x = "X", y = "Y")
+      xlim(-10, 179) +
+      ylim(-10, 91) +
+      geom_point(data = HW, mapping = aes(x = height, y = weight)) +
+      labs(x = "height", y = "weight")
     
     print(p)
   })
