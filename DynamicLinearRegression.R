@@ -8,32 +8,6 @@ HW <-tibble(
   weight = c(63, 81, 60, 91, 47, 57, 76, 72, 62, 52)
 )
 
-# make a range of intercepts (a) and slopes (b) for slider:
-
-a <- seq(from = 47, to = 91, length.out =100)
-b <- seq(from = -10, to = 10, length.out =100)
-
-# Create sliders for intercept 'a' and slope 'b'
-slider_a <- sliderInput("intercept", "Intercept (a):", min = -100, max = 100, value = 0, step = 1)
-slider_b <- sliderInput("slope", "Slope (b):", min = -5, max = 5, value = 1, step = 0.1)
-
-
-# make test plot with line as slider. 
-tt <- 
-
-
-
-p <- HW %>%
-  ggplot(mapping = aes(x = height, y = weight)) +
-  geom_point()
-
-ggplotly(p)
-
-
-dyn_func
-
-
-
 
 ############3############3############3############3############3############3############3############3############3
 
@@ -67,28 +41,29 @@ ggplotly(p) %>%
 
 
 ui <- fluidPage(
-  sliderInput("y_intercept", "Y-Intercept", min = -10, max = 10, step = 0.1, value = 0),
-  sliderInput("slope", "Slope", min = 0, max = 1, step = 0.01, value = 1),
+  sliderInput("y_intercept", "Y-Intercept", min = -20, max = 10, step = 0.1, value = 1),
+  sliderInput("slope", "Slope", min = 0, max = 1, step = 0.01, value = 0.5),
   plotOutput("plot")
 )
 
 server <- function(input, output, session) {
   output$plot <- renderPlot({
     # Create a data frame with x values
-    x <- seq(0, 100, length.out = 10)
+    x <- seq(50, 180, length.out = 10)
     df <- data.frame(x = x, y = input$y_intercept + input$slope * x)
     
     # Create a ggplot with a straight line
     p <- ggplot(df, aes(x, y)) +
       geom_line() +
-      xlim(-10, 179) +
-      ylim(-10, 91) +
+      xlim(100, 179) +
+      ylim(30, 91) +
       geom_point(data = HW, mapping = aes(x = height, y = weight)) +
-      labs(x = "height", y = "weight")
-    
+      labs(x = "height", y = "weight") +
+      geom_segment(aes(x = 100, y = 80, xend = 130, yend = 70, color = "red"))
     print(p)
   })
 }
+
 
 shinyApp(ui, server)
 
