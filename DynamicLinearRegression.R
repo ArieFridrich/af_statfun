@@ -49,12 +49,12 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   output$plot <- renderPlot({
     # Create a data frame with x values
-    x <- seq(50, 180, length.out = 10)
+    x <- HW$height
     df <- data.frame(x = x, y = input$y_intercept + input$slope * x)
     
     # Create a ggplot with a straight line
     p <- ggplot(df, aes(x, y)) +
-      geom_line() +
+      geom_point(aes(color = "red")) +
       xlim(100, 179) +
       ylim(30, 91) +
       geom_point(data = HW, mapping = aes(x = height, y = weight)) +
