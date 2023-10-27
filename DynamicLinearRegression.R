@@ -9,34 +9,7 @@ HW <-tibble(
 )
 
 
-############3############3############3############3############3############3############3############3############3
-
-# Create a function to generate the data for the line
-generate_line_data <- function(a, b) {
-  x <- seq(0, 100, by = 1)
-  y <- a + b*x
-  data.frame(x = x, y = y)
-}
-
-# Create a ggplot2 plot of the HW dataset and the line data
-p <- HW %>%
-  ggplot(mapping = aes(x = height, y = weight)) +
-  geom_point() +
-  geom_line(
-    data = generate_line_data(a = 50, b = 0.5),
-    mapping = aes(x = x, y = y),
-    color = "red"
-  )
-
-# Convert the ggplot2 plot to a ggplotly plot
-ggplotly(p)
-
-ggplotly(p) %>%
-  add_sliders
-  
-
-
-
+############3############3############3############3############3############3############3############3############
 ##############################################################################################################################
 
 
@@ -50,19 +23,20 @@ server <- function(input, output, session) {
   output$plot <- renderPlot({
     # Create a data frame with x values
     x <- HW$height
-    df <- data.frame(x = x, y = input$y_intercept + input$slope * x)
+    df <- data.frame(x_hw = x, y_hw = input$y_intercept + input$slope * x, data_y = HW$weight)
     
     # Create a ggplot with a straight line
-    p <- ggplot(df, aes(x, y)) +
-      geom_point(aes(color = "red")) +
+    p <- ggplot(df, aes(x_hw, y_hw)) +
+      geom_line(aes(color = "red")) +
       xlim(100, 179) +
       ylim(30, 91) +
       geom_point(data = HW, mapping = aes(x = height, y = weight)) +
       labs(x = "height", y = "weight") +
-      geom_segment(aes(x = 100, y = 80, xend = 130, yend = 70, color = "red"))
+      geom_segment(mapping = aes(x = x_hw, y = data_y, xend = x_hw, yend = y_hw))
     print(p)
   })
 }
+
 
 
 shinyApp(ui, server)
