@@ -14,8 +14,8 @@ HW <-tibble(
 
 
 ui <- fluidPage(
-  sliderInput("y_intercept", "Y-Intercept", min = -20, max = 10, step = 0.1, value = 1),
-  sliderInput("slope", "Slope", min = -1, max = 1, step = 0.01, value = 0.5),
+  sliderInput("y_intercept", "Y-Intercept", min = 0, max = 20, step = 0.1, value = 10),
+  sliderInput("slope", "Slope", min = -2, max = 2, step = 0.01, value = 0),
   plotOutput("plot")
 )
 
@@ -29,7 +29,7 @@ server <- function(input, output, session) {
     p <- ggplot(df, aes(x_hw, y_hw)) +
       geom_line(aes(color = "red")) +
       xlim(0, 20) +
-      ylim(0, 20) +
+      ylim(0, 25) +
       geom_point(data = HW, mapping = aes(x = height, y = weight)) +
       labs(x = "height", y = "weight") +
       geom_segment(mapping = aes(x = x_hw, y = data_y, xend = x_hw, yend = y_hw))
