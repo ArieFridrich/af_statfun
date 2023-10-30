@@ -14,6 +14,7 @@ HW <-tibble(
 
 
 ui <- fluidPage(
+  
   sliderInput("y_intercept", "Y-Intercept", min = 0, max = 20, step = 0.1, value = 10),
   sliderInput("slope", "Slope", min = -2, max = 2, step = 0.01, value = 0),
   plotOutput("plot")
